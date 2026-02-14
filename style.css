@@ -12,6 +12,22 @@ body, html {
     height: 100vh;
 }
 
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 8px;
+    z-index: 1000;
+    padding: 8px 12px;
+    background-color: #111827;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.skip-link:focus {
+    top: 8px;
+}
+
 
 :root {
     --font-family: roboto, sans-serif;

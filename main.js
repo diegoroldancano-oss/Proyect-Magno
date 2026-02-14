@@ -1,6 +1,15 @@
 
 const cacheVistas = {}
 
+const skipLink = document.querySelector('.skip-link')
+const mainContent = document.getElementById('contenido')
+
+if (skipLink && mainContent) {
+    skipLink.addEventListener('click', () => {
+        mainContent.focus()
+    })
+}
+
 async function cargarContenido() {
     const hash = window.location.hash.slice(1) || 'inicio'
     const contentDiv = document.getElementById('contenido')
