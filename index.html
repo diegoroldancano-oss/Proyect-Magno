@@ -25,6 +25,17 @@
     <div class="container__wrapper">
         <div class="container__nav-wrapper">
             <header class="container__header">
+                <button
+                    id="btn-sidebar-toggle"
+                    class="header__menu-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="idSidebar"
+                    aria-label="Abrir menu de navegacion"
+                >
+                    Menú
+                </button>
+
                 <a class="container__header-link" href="#">
                     <img src="img/favicon-32x32.png" alt="logo">
                 </a>
@@ -51,7 +62,7 @@
 
         <section class="content__wrapper" aria-label="Contenido principal de la aplicación">
 
-            <aside class="content__aside">
+            <aside id="idSidebar" class="content__aside">
                 <header class="content__header-nav">
                     <h2 class="content__title">Mercados D&D</h2>
                     <span>Gestión inteligente</span>
