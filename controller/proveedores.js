@@ -1,73 +1,227 @@
-export function init() {
-    const btnNuevoProveedor = document.getElementById('btn-Proveedores');
+const INITIAL_PROVEEDORES = Object.freeze([
+    {
+        nit: "900100001",
+        nombre: "SuperOriente",
+        direccion: "Calle 123",
+        telefono: "123456789",
+        email: "superoriente@example.com"
+    },
+    {
+        nit: "900100002",
+        nombre: "SuperOccidente",
+        direccion: "Avenida 456",
+        telefono: "987654321",
+        email: "superoccidente@example.com"
+    },
+    {
+        nit: "900100003",
+        nombre: "Alimentos Central",
+        direccion: "Carrera 78",
+        telefono: "321654987",
+        email: "central@example.com"
+    }
+]);
 
-    if (btnNuevoProveedor) {
-        btnNuevoProveedor.addEventListener('click', () => alert('Agregar nuevo proveedor'));
+function normalizarProveedor(proveedor) {
+    return {
+        nit: String(proveedor.nit || ""),
+        nombre: String(proveedor.nombre || ""),
+        direccion: String(proveedor.direccion || ""),
+        telefono: String(proveedor.telefono || ""),
+        email: String(proveedor.email || "")
+    };
+}
+
+export class ProveedoresModel {
+    constructor(seed = INITIAL_PROVEEDORES) {
+        this.proveedores = seed.map(normalizarProveedor);
     }
 
-    cargarTablaProveedores();
-    configurarAccionesTablaProveedores();
-}
+    obtenerTodos() {
+        return this.proveedores.map((proveedor) => ({ ...proveedor }));
+    }
 
-function cargarTablaProveedores() {
-    const dataProveedores = [
-        { nit: 1, nombre: 'SuperOriente', telefono: '123456789', direccion: 'Calle 123', email: 'Superori@example.com' },
-        { nit: 2, nombre: 'SuperOccidente', telefono: '987654321', direccion: 'Avenida 456', email: 'nuevoprove@example.com' },
-        { nit: 2, nombre: 'SuperOccidente', telefono: '987654321', direccion: 'Avenida 456', email: 'nuevoprove@example.com' },
-        { nit: 2, nombre: 'SuperOccidente', telefono: '987654321', direccion: 'Avenida 456', email: 'nuevoprove@example.com' },
-        { nit: 2, nombre: 'SuperOccidente', telefono: '987654321', direccion: 'Avenida 456', email: 'nuevoprove@example.com' },
-        { nit: 2, nombre: 'SuperOccidente', telefono: '987654321', direccion: 'Avenida 456', email: 'nuevoprove@example.com' },
-        { nit: 2, nombre: 'SuperOccidente', telefono: '987654321', direccion: 'Avenida 456', email: 'nuevoprove@example.com' },
-        { nit: 2, nombre: 'SuperOccidente', telefono: '987654321', direccion: 'Avenida 456', email: 'nuevoprove@example.com' },
-        { nit: 2, nombre: 'SuperOccidente', telefono: '987654321', direccion: 'Avenida 456', email: 'nuevoprove@example.com' },
-        { nit: 2, nombre: 'SuperOccidente', telefono: '987654321', direccion: 'Avenida 456', email: 'nuevoprove@example.com' },
-    ];
+    obtenerPorNit(nit) {
+        return this.proveedores.find((proveedor) => proveedor.nit === String(nit)) || null;
+    }
 
-    const tbody = document.querySelector('#tbodyProveedores tbody');
-    if (!tbody) return;
+    eliminarPorNit(nit) {
+        const nitStr = String(nit);
+        const index = this.proveedores.findIndex((proveedor) => proveedor.nit === nitStr);
 
-    tbody.innerHTML = '';
-
-    dataProveedores.forEach((proveedor) => {
-        const fila = `
-            <tr>
-                <td>${proveedor.nit}</td>
-                <td>${proveedor.nombre}</td>
-                <td>${proveedor.telefono}</td>
-                <td>${proveedor.direccion}</td>
-                <td>${proveedor.email}</td>
-                <td>
-                    <button type="button" class="btn-editar" aria-label="Editar proveedor ${proveedor.nombre}" title="Editar proveedor">&#9998;</button>
-                </td>
-                <td>
-                    <button type="button" class="btn-eliminar" aria-label="Eliminar proveedor ${proveedor.nombre}" title="Eliminar proveedor">&#128465;</button>
-                </td>
-            </tr>
-        `;
-
-        tbody.innerHTML += fila;
-    });
-}
-
-function configurarAccionesTablaProveedores() {
-    const tabla = document.getElementById('tbodyProveedores');
-    if (!tabla || tabla.dataset.actionsBound === 'true') return;
-
-    tabla.addEventListener('click', (event) => {
-        const boton = event.target.closest('button');
-        if (!boton) return;
-
-        const fila = boton.closest('tr');
-        const nombreProveedor = fila?.children?.[1]?.textContent?.trim() || '';
-
-        if (boton.classList.contains('btn-editar')) {
-            alert(`Editar proveedor: ${nombreProveedor}`);
+        if (index < 0) {
+            return false;
         }
 
-        if (boton.classList.contains('btn-eliminar')) {
-            alert(`Eliminar proveedor: ${nombreProveedor}`);
-        }
-    });
+        this.proveedores.splice(index, 1);
+        return true;
+    }
+}
 
-    tabla.dataset.actionsBound = 'true';
+export class ProveedoresView {
+    constructor(doc = document) {
+        this.doc = doc;
+        this.btnNuevo = this.doc.getElementById("btn-Proveedores");
+        this.tbody = this.doc.querySelector("#tbodyProveedores tbody");
+    }
+
+    disponible() {
+        return Boolean(this.tbody);
+    }
+
+    bindNuevoProveedor(handler) {
+        if (!this.btnNuevo) {
+            return;
+        }
+
+        this.btnNuevo.addEventListener("click", handler);
+    }
+
+    bindAccionesTabla({ onEditar, onEliminar }) {
+        if (!this.tbody) {
+            return;
+        }
+
+        this.tbody.addEventListener("click", (event) => {
+            const button = event.target.closest("button[data-action]");
+            if (!button) {
+                return;
+            }
+
+            const row = button.closest("tr[data-nit]");
+            if (!row) {
+                return;
+            }
+
+            const nit = row.dataset.nit;
+
+            if (button.dataset.action === "editar") {
+                onEditar(nit);
+                return;
+            }
+
+            if (button.dataset.action === "eliminar") {
+                onEliminar(nit);
+            }
+        });
+    }
+
+    render(proveedores) {
+        if (!this.tbody) {
+            return;
+        }
+
+        if (!proveedores.length) {
+            const row = this.doc.createElement("tr");
+            const cell = this.doc.createElement("td");
+            cell.colSpan = 7;
+            cell.textContent = "No hay proveedores cargados.";
+            row.appendChild(cell);
+            this.tbody.replaceChildren(row);
+            return;
+        }
+
+        const fragment = this.doc.createDocumentFragment();
+        proveedores.forEach((proveedor) => {
+            fragment.appendChild(this.crearFila(proveedor));
+        });
+
+        this.tbody.replaceChildren(fragment);
+    }
+
+    crearFila(proveedor) {
+        const row = this.doc.createElement("tr");
+        row.dataset.nit = proveedor.nit;
+
+        row.appendChild(this.crearCelda(proveedor.nit));
+        row.appendChild(this.crearCelda(proveedor.nombre));
+        row.appendChild(this.crearCelda(proveedor.direccion));
+        row.appendChild(this.crearCelda(proveedor.telefono));
+        row.appendChild(this.crearCelda(proveedor.email));
+        row.appendChild(this.crearCeldaBoton("Editar", "btn-editar", "editar"));
+        row.appendChild(this.crearCeldaBoton("Eliminar", "btn-eliminar", "eliminar"));
+
+        return row;
+    }
+
+    crearCelda(valor) {
+        const cell = this.doc.createElement("td");
+        cell.textContent = String(valor);
+        return cell;
+    }
+
+    crearCeldaBoton(label, className, action) {
+        const cell = this.doc.createElement("td");
+        const button = this.doc.createElement("button");
+        button.type = "button";
+        button.className = className;
+        button.dataset.action = action;
+        button.textContent = label;
+        cell.appendChild(button);
+        return cell;
+    }
+}
+
+export class ProveedoresController {
+    constructor({ model, view }) {
+        this.model = model;
+        this.view = view;
+
+        this.handleNuevoProveedor = this.handleNuevoProveedor.bind(this);
+        this.handleEditarProveedor = this.handleEditarProveedor.bind(this);
+        this.handleEliminarProveedor = this.handleEliminarProveedor.bind(this);
+    }
+
+    init() {
+        if (!this.view.disponible()) {
+            return;
+        }
+
+        console.log("Iniciando modulo de Proveedores...");
+        this.view.bindNuevoProveedor(this.handleNuevoProveedor);
+        this.view.bindAccionesTabla({
+            onEditar: this.handleEditarProveedor,
+            onEliminar: this.handleEliminarProveedor
+        });
+        this.render();
+    }
+
+    render() {
+        this.view.render(this.model.obtenerTodos());
+    }
+
+    handleNuevoProveedor() {
+        alert("Flujo de creacion de proveedor pendiente de backend.");
+    }
+
+    handleEditarProveedor(nit) {
+        const proveedor = this.model.obtenerPorNit(nit);
+        if (!proveedor) {
+            return;
+        }
+
+        alert(`Edicion pendiente de backend para: ${proveedor.nombre}`);
+    }
+
+    handleEliminarProveedor(nit) {
+        const proveedor = this.model.obtenerPorNit(nit);
+        if (!proveedor) {
+            return;
+        }
+
+        const confirmar = confirm(`Deseas eliminar a \"${proveedor.nombre}\"?`);
+        if (!confirmar) {
+            return;
+        }
+
+        this.model.eliminarPorNit(nit);
+        this.render();
+    }
+}
+
+export function init() {
+    const model = new ProveedoresModel();
+    const view = new ProveedoresView();
+    const controller = new ProveedoresController({ model, view });
+    controller.init();
 }

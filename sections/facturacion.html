@@ -1,42 +1,41 @@
-                <div>
-                    <h1 style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">Facturación</h1>
+                <div role="main" aria-labelledby="facturacion-title">
                     <div>
                         <header class="main__header-all">
 
                             <div class="main__header-desc">
-                                <h2 data-focus-start>Facturación</h2>
+                                <h2 id="facturacion-title">Facturación</h2>
                                 <p>Puedes gestionar tus facturas desde el sigueinte panel</p>
                             </div>
 
                             <div class="main__button-cont">
-                                <button class="main__button-all" style="background-color: rgb(34, 167, 63);" type="submit">Pendientes</button>                          
-                                <button class="main__button-all" type="submit">Nueva factura</button>
+                                <button class="main__button-all" style="background-color: rgb(34, 167, 63);" type="button" aria-pressed="true">Pendientes</button>
+                                <button class="main__button-all" type="button">Nueva factura</button>
                                 
                             </div>
                         </header>
 
                         <section class="fact__info-wraper">
-                            <form class="fact__form">
+                            <form class="fact__form" aria-label="Formulario de facturación">
                                 <div>
                                     <label for="fact-nit">Nit</label>
-                                    <input id="fact-nit" name="nit" type="number" >
+                                    <input id="fact-nit" name="nit" type="text" inputmode="numeric" autocomplete="off" >
                                 </div>
                                 <div>
-                                    <label for="fact-numero-factura">Nº Factura</label>
-                                    <input id="fact-numero-factura" name="numero_factura" type="text">
+                                    <label for="fact-numero">Nº Factura</label>
+                                    <input id="fact-numero" name="numero_factura" type="text" autocomplete="off">
                                 </div>
                                 <div>
                                     <label for="fact-iva">Iva</label>
-                                    <input id="fact-iva" name="iva" style="border: none;" type="number" placeholder="19%">
+                                    <input id="fact-iva" name="iva" style="border: none;" type="number" placeholder="19%" min="0" step="0.01">
                                 </div>
                                 <div>
                                     <label for="fact-costo">Costo</label>
-                                    <input id="fact-costo" name="costo" type="number" placeholder="0">
+                                    <input id="fact-costo" name="costo" type="number" placeholder="0" min="0" step="0.01">
                                 </div>
                                 
                                 <div>
                                     <label for="fact-cantidad">Cantidad</label>
-                                    <input id="fact-cantidad" name="cantidad" type="text" placeholder="$0.00">
+                                    <input id="fact-cantidad" name="cantidad" type="number" inputmode="decimal" placeholder="$0.00" min="0" step="1">
                                 </div>
                                 <div>
                                    <button class="main__button-all" type="submit">Agregar Producto</button>
@@ -47,7 +46,7 @@
 
                     <div>
                         <footer class="footer__table-cont2">
-                            <table class="footer__table2">                               
+                            <table class="footer__table2" aria-label="Listado de productos facturados">
                                 <thead>
                                     <tr>
                                         <th scope="col" >Codigo</th>
@@ -65,7 +64,7 @@
                                         <td data-label="Precio">$20.00</td>
                                         <td data-label="Iva">16%</td>
                                         <td data-label="Precio + iva">$23.20</td>
-                                        <td data-label="icon"><button>🗑️</button></td>
+                                        <td data-label="icon"><button type="button" aria-label="Eliminar producto 001">🗑️</button></td>
                                     </tr>
                                     <tr>
                                         <td data-label="Codigo">002</td>
@@ -73,7 +72,7 @@
                                         <td data-label="Precio">$30.00</td>
                                         <td data-label="Iva">16%</td>
                                         <td data-label="Precio + iva">$34.80</td>
-                                        <td data-label="icon"><button>🗑️</button></td>
+                                        <td data-label="icon"><button type="button" aria-label="Eliminar producto 002">🗑️</button></td>
                                     </tr>
                                     <tr>
                                         <td data-label="Codigo">003</td>
@@ -81,7 +80,7 @@
                                         <td data-label="Precio">$50.00</td>
                                         <td data-label="Iva">16%</td>
                                         <td data-label="Precio + iva">$58.00</td>
-                                        <td data-label="icon"><button>🗑️</button></td>
+                                        <td data-label="icon"><button type="button" aria-label="Eliminar producto 003">🗑️</button></td>
                                     </tr>
                                     <tr>
                                         <td data-label="Codigo">004</td>
@@ -89,7 +88,7 @@
                                         <td data-label="Precio">$25.00</td>
                                         <td data-label="Iva">16%</td>
                                         <td data-label="Precio + iva">$29.00</td>
-                                        <td data-label="icon"><button>🗑️</button></td>
+                                        <td data-label="icon"><button type="button" aria-label="Eliminar producto 004">🗑️</button></td>
                                     </tr>
 
                                     <tr>
@@ -98,7 +97,7 @@
                                         <td data-label="Precio">$25.00</td>
                                         <td data-label="Iva">16%</td>
                                         <td data-label="Precio + iva">$29.00</td>
-                                        <td data-label="icon"><button>🗑️</button></td>
+                                        <td data-label="icon"><button type="button" aria-label="Eliminar producto 005">🗑️</button></td>
                                     </tr>
 
                                     <tr>
@@ -107,7 +106,7 @@
                                         <td data-label="Precio">$25.00</td>
                                         <td data-label="Iva">16%</td>
                                         <td data-label="Precio + iva">$29.00</td>
-                                        <td data-label="icon"><button>🗑️</button></td>
+                                        <td data-label="icon"><button type="button" aria-label="Eliminar producto 006">🗑️</button></td>
                                     </tr>
 
                                     <tr>
@@ -116,7 +115,7 @@
                                         <td data-label="Precio">$25.00</td>
                                         <td data-label="Iva">16%</td>
                                         <td data-label="Precio + iva">$29.00</td>
-                                        <td data-label="icon"><button>🗑️</button></td>
+                                        <td data-label="icon"><button type="button" aria-label="Eliminar producto 007">🗑️</button></td>
                                     </tr>
 
                                     <tr>
@@ -125,7 +124,7 @@
                                         <td data-label="Precio">$25.00</td>
                                         <td data-label="Iva">16%</td>
                                         <td data-label="Precio + iva">$29.00</td>
-                                        <td data-label="icon"><button>🗑️</button></td>
+                                        <td data-label="icon"><button type="button" aria-label="Eliminar producto 008">🗑️</button></td>
                                     </tr>
 
                                     <tr>
@@ -134,7 +133,7 @@
                                         <td data-label="Precio">$25.00</td>
                                         <td data-label="Iva">16%</td>
                                         <td data-label="Precio + iva">$29.00</td>
-                                        <td data-label="icon"><button>🗑️</button></td>
+                                        <td data-label="icon"><button type="button" aria-label="Eliminar producto 009">🗑️</button></td>
                                     </tr>
                                 </tbody>
                             </table>
