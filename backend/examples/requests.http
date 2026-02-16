@@ -1,0 +1,67 @@
+### Health
+GET http://localhost:4000/api/health
+
+### Login
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@nabook.local",
+  "password": "Admin12345!"
+}
+
+### Perfil (reemplazar token)
+GET http://localhost:4000/api/perfil
+Authorization: Bearer {{token}}
+
+### Actualizar perfil personal
+PATCH http://localhost:4000/api/perfil/personal
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Jhon Smith",
+  "email": "john@example.com"
+}
+
+### Listar clientes
+GET http://localhost:4000/api/clientes?page=1&pageSize=20&q=
+Authorization: Bearer {{token}}
+
+### Crear cliente
+POST http://localhost:4000/api/clientes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "cedula": "555000123",
+  "nombre": "Cliente Demo",
+  "telefono": "3001234567",
+  "correo": "cliente.demo@correo.com",
+  "direccion": "Calle 99 #10-20"
+}
+
+### Crear proveedor
+POST http://localhost:4000/api/proveedores
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nit": "900300500",
+  "nombre": "Proveedor Demo",
+  "direccion": "Avenida Demo 12",
+  "telefono": "3009876543",
+  "email": "proveedor.demo@correo.com"
+}
+
+### Crear producto
+POST http://localhost:4000/api/productos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "codigo": 991001,
+  "nombre": "Producto Demo",
+  "precio": 2500,
+  "iva": "19%"
+}

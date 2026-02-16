@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         UserRole @default(ADMIN)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  profile      Profile?
+
+  @@map("users")
+}
+
+model Profile {
+  id                  String   @id @default(cuid())
+  userId              String   @unique @map("user_id")
+  personalNombre      String   @default("") @map("personal_nombre")
+  personalTelefono    String   @default("") @map("personal_telefono")
+  personalEmail       String   @default("") @map("personal_email")
+  personalDireccion   String   @default("") @map("personal_direccion")
+  negocioNombre       String   @default("") @map("negocio_nombre")
+  negocioTipo         String   @default("") @map("negocio_tipo")
+  negocioUbicacion    String   @default("") @map("negocio_ubicacion")
+  negocioFechaCreacion DateTime? @map("negocio_fecha_creacion")
+  photoUrl            String   @default("img/profile-img.jpg") @map("photo_url")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model Cliente {
+  id        String   @id @default(cuid())
+  cedula    String   @unique
+  nombre    String
+  telefono  String
+  correo    String
+  direccion String
+  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([deletedAt])
+  @@map("clientes")
+}
+
+model Proveedor {
+  id        String   @id @default(cuid())
+  nit       String   @unique
+  nombre    String
+  direccion String
+  telefono  String
+  email     String
+  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([deletedAt])
+  @@map("proveedores")
+}
+
+model Producto {
+  id         String   @id @default(cuid())
+  codigo     Int      @unique
+  nombre     String
+  precio     Int
+  ivaPercent Int      @map("iva_percent")
+  deletedAt  DateTime? @map("deleted_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([deletedAt])
+  @@map("productos")
+}
